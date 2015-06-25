@@ -1,0 +1,14 @@
+Package: permseq
+Type: Package
+Title: Mapping protein-DNA interactions in highly repetitive regions of the genomes with prior-enhanced read mapping.
+Version: 0.99.0
+Date: 2015-03-18
+Author: Xin Zeng, M. Constanza Rojo-Alfaro, Ye Zheng, Sunduz Keles
+Maintainer: Xin Zeng <xinzeng@stat.wisc.edu>, M. Constanza Rojo-Alfaro <rojo@stat.wisc.edu>, Ye Zheng <yezheng@stat.wisc.edu>
+Description: Multi-reads allocation of ChIP-seq data.
+License: GPL (>= 2)
+Depends: R (>= 2.12.0), MASS, splines, parallel, grplasso, methods
+LazyLoad: yes
+biocViews: ChIPseq, Sequencing, Transcription, multi-read
+SystemRequirements: Perl
+Suggests: knitr
