@@ -21,7 +21,7 @@ setClass("Prior",representation=representation(
                    chipSAM = "OptionalCharacter",
                    chipAllocate = "OptionalCharacter",
                    chipUni = "OptionalCharacter",
-                   chipFormat = "OptionalCharacter",
+                   chipAlignFormat = "OptionalCharacter",
 
                    dataNum = "OptionalNumeric",
                    fragL = "OptionalNumeric",

@@ -19,7 +19,7 @@ setMethod(f = "[", signature = "Prior", definition=function(x, i, drop="missing"
             if(i == "chipSAM"){return(x@chipSAM)}else{}
             if(i == "chipAllocate"){return(x@chipAllocate)}else{}
             if(i == "chipUni"){return(x@chipUni)}else{}
-            if(i == "chipFormat"){return(x@chipFormat)}else{}
+            if(i == "chipAlignFormat"){return(x@chipAlignFormat)}else{}
 
 
             if(i == "dataNum"){return(x@dataNum)}else{}
@@ -66,7 +66,7 @@ setMethod(f = "[[", signature = "Prior", definition=function(x, i, drop="missing
   if(i == "chipSAM"){return(x@chipSAM)}else{}
   if(i == "chipAllocate"){return(x@chipAllocate)}else{}
   if(i == "chipUni"){return(x@chipUni)}else{}
-  if(i == "chipFormat"){return(x@chipFormat)}else{}
+  if(i == "chipAlignFormat"){return(x@chipAlignFormat)}else{}
 
   
   if(i == "dataNum"){return(x@dataNum)}else{}
@@ -152,7 +152,7 @@ setMethod("print", "Prior",
             print(x@chipAllocate)
             cat("\n")
             cat("ChIP-seq aligned by Permseq in other format:\n")
-            print(x@chipFormat)
+            print(x@chipAlignFormat)
             cat("\n")
             
             cat("*****************************************************\n")
@@ -287,11 +287,11 @@ setMethod("show", signature(object = "Prior"),
            
             
             cat("** ChIP-seq Output Directory and Format:\n")
-            if(length(object@chipFormat) == 0){
+            if(length(object@chipAlignFormat) == 0){
               print("NULL")
             }else{
             
-              print(object@chipFormat)
+              print(object@chipAlignFormat)
             }
             cat("\n")
 
@@ -462,7 +462,7 @@ setReplaceMethod(f = "[", signature = "Prior", definition=function(x,i,value){
             if(i == "chipSAM"){x@chipSAM <- value}else{}
             if(i == "chipAllocate"){x@chipAllocate <- value}else{}
             if(i == "chipUni"){x@chipUni <- value}else{}
-            if(i == "chipFormat"){x@chipFormat <- value}else{}
+            if(i == "chipAlignFormat"){x@chipAlignFormat <- value}else{}
 
 
                  
@@ -508,7 +508,7 @@ setReplaceMethod(f = "[[", signature = "Prior", definition=function(x,i,value){
             if(i == "chipSAM"){x@chipSAM <- value}else{}
             if(i == "chipAllocate"){x@chipAllocate <- value}else{}
             if(i == "chipUni"){x@chipUni <- value}else{}
-            if(i == "chipFormat"){x@chipFormat <- value}else{}
+            if(i == "chipAlignFormat"){x@chipAlignFormat <- value}else{}
 
 
                  
