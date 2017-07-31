@@ -100,7 +100,16 @@ readAllocate = function(object = NULL, outfileLoc = "./", outputFormat = NULL, o
                     }else{
                         message( "Info: Aligning reads using BWA..." )
                         system(paste(bwaDir, '/bwa aln -n ', nBWA, ' -o ', oBWA, ' -t ', tBWA, ' ', bwaIndex, ' ', chipFile[i], ' >', chipName[i], '.sai', sep=''))
-                        system(paste(bwaDir, '/bwa samse -n ', mBWA, ' ', bwaIndex, ' ', chipName[i], '.sai', ' ', chipFile[i], ' | ', bwaDir, '/xa2multi.pl >', chipName[i], '.sam', sep=''))
+                        system(paste(bwaDir, '/bwa samse -n ', mBWA, ' ', bwaIndex, ' ', chipName[i], '.sai', ' ', chipFile[i], '  >', chipName[i], '.sam.multiOneLine', sep=''))
+
+                        system(cat("awk '{split($0, tag,\"XA\");split($1, head, \"\"); if (head[1] == \"@\") print $0; else if ($5 >24) print $0; else if (tag[2] != \"\") print $0;}' ", chipName[i], ".sam.multiOneLine | ", bwaDir, "/xa2multi.pl >", chipName[i], ".sam.tmp\n", sep = ""))
+                     
+                        system(cat("cat ", chipName[i], ".sam.tmp | awk 'BEGIN {FS=\"\\t\" ; OFS=\"\\t\"} ! /^@/ && $6!=\"*\" { cigar=$6; gsub(\"[0-9]+D\",\"\",cigar); n = split(cigar,vals,\"[A-Z]\"); s = 0; for (i=1;i<=n;i++) s=s+vals[i]; seqlen=length($10) ; if (s!=seqlen) {print $0} }' >", chipName[i], ".sam.tmp.badCIGAR\n", sep = ""))
+
+                        system(cat("if [ $(cat ", chipName[i], ".sam.tmp.badCIGAR | wc -l) -gt 0 ]; then\ncat ", chipName[i], ".sam.tmp  | grep -v -F -f ", chipName[i], ".sam.tmp.badCIGAR >", chipName[i], ".sam \nelse\nmv ", chipName[i], ".sam.tmp ", chipName[i], ".sam\nfi\n", sep = "")) 
+
+
+                        ## system(paste(bwaDir, '/bwa samse -n ', mBWA, ' ', bwaIndex, ' ', chipName[i], '.sai', ' ', chipFile[i], ' | ', bwaDir, '/xa2multi.pl >', chipName[i], '.sam', sep=''))
                         chipAlign[[chipName[i]]] <- NULL
                         chipSAM[i] <- paste(outfileLoc,'/', chipName[i],'.sam',sep='')
                     }
@@ -290,6 +299,7 @@ readAllocate = function(object = NULL, outfileLoc = "./", outputFormat = NULL, o
                    bowtieInfo = bowtieInfo,
                    bwaInfo = bwaInfo,
                    csemDir = csemDir,
+                   picardDir = picardDir,
                    dataNum = length(chipFile)))
         
     }else{

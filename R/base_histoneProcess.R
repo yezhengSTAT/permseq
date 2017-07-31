@@ -30,7 +30,16 @@
                     message( "Info: Aligning Histone ChIP-seq reads using BWA." )
                     ## Generates the SAM file using BWA.
                     system(paste(bwaDir, '/bwa aln -n ', nBWA, ' -o ', oBWA, ' -t ', tBWA, ' ', bwaIndex, ' ', histoneFile, ' >', file.sai, sep=''))
-                    system(paste(bwaDir, '/bwa samse -n ', mBWA, ' ', bwaIndex, ' ', file.sai, ' ', histoneFile, ' | ', bwaDir, '/xa2multi.pl >', file.sam, sep=''))
+                    system(paste(bwaDir, '/bwa samse -n ', mBWA, ' ', bwaIndex, ' ', file.sai, ' ', histoneFile, ' >', file.sam, '.multiOneLine', sep=''))
+
+                    system(cat("awk '{split($0, tag,\"XA\");split($1, head, \"\"); if (head[1] == \"@\") print $0; else if ($5 >24) print $0; else if (tag[2] != \"\") print $0;}' ", file.sam, ".multiOneLine | ", bwaDir, "/xa2multi.pl >", file.sam, ".tmp\n", sep = ""))
+                     
+                    system(cat("cat ", file.sam, ".tmp | awk 'BEGIN {FS=\"\\t\" ; OFS=\"\\t\"} ! /^@/ && $6!=\"*\" { cigar=$6; gsub(\"[0-9]+D\",\"\",cigar); n = split(cigar,vals,\"[A-Z]\"); s = 0; for (i=1;i<=n;i++) s=s+vals[i]; seqlen=length($10) ; if (s!=seqlen) {print $0} }' >", file.sam, ".tmp.badCIGAR\n", sep = ""))
+
+                    system(cat("if [ $(cat ", file.sam, ".tmp.badCIGAR | wc -l) -gt 0 ]; then\ncat ", file.sam, ".tmp  | grep -v -F -f ", file.sam, ".tmp.badCIGAR >", file.sam, "\nelse\nmv ", file.sam, ".tmp ", file.sam, "\nfi\n", sep = "")) 
+
+
+                    ## system(paste(bwaDir, '/bwa samse -n ', mBWA, ' ', bwaIndex, ' ', file.sai, ' ', histoneFile, ' | ', bwaDir, '/xa2multi.pl >', file.sam, sep=''))
                 }
             }else{#Histone file is in SAM format -  can skip alignment step and directly allocate multi-reads using CSEM
         

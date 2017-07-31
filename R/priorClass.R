@@ -29,6 +29,7 @@ setClass("Prior",representation=representation(
                    bwaInfo = "OptionalList",
                    bowtieInfo = "OptionalList",
                    csemDir = "OptionalCharacter",
+                   picardDir = "OptionalCharacter",
                    outfileLoc = "OptionalCharacter",
                    prior = "OptionalCharacter",
                    chrom.ref = "OptionalCharacter"
